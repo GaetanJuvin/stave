@@ -19,7 +19,6 @@
 components/
 ├── [ComponentName]/
 │   ├── [ComponentName].tsx       # Component implementation
-│   ├── [ComponentName].test.tsx  # Tests
 │   └── index.ts                 # Public export
 ```
 
@@ -28,7 +27,7 @@ components/
 1. **Props over state** — Prefer passing data as props; lift state to the nearest common ancestor
 2. **Composition over configuration** — Build complex UI from simple, composable components
 3. **No business logic in components** — Call service layer functions; components handle rendering only
-4. **Collocate related code** — Tests, styles, and utilities next to the component they serve
+4. **Test at the user level** — Don't unit-test components in isolation; cover them with E2E tests that verify real user flows
 
 ## State Management
 
@@ -75,13 +74,42 @@ Use [data fetching library] for server state. Keep caching and synchronization i
 | Cumulative Layout Shift | < [target] |
 | Bundle size (initial) | < [target] |
 
+## Testing
+
+### E2E First
+
+Frontend features are tested primarily through **browser-based E2E tests** that simulate real user behavior:
+
+```
+tests/e2e/
+├── auth.test.ts              # Login, signup, logout
+├── [feature].test.ts         # Feature-specific user journeys
+└── accessibility.test.ts     # Keyboard nav, screen reader checks
+```
+
+Use **MCP browser tools** (Brave MCP, Claude MCP) or **Playwright** to drive a real browser:
+- Click buttons, fill forms, navigate pages — like a human would
+- Assert on visible text and UI state — not component internals
+- Test the full stack: frontend + API + database together
+
+### What NOT to Do
+- No snapshot tests — they test nothing useful and create noise
+- No shallow rendering or component-level unit tests — test real pages instead
+- No mocking the entire backend — run against a real local instance
+
+### Accessibility Testing
+Include accessibility checks in E2E tests:
+- Tab through interactive elements and verify focus order
+- Verify ARIA labels are present and correct
+- Check color contrast programmatically
+
 ## Accessibility
 
 - All interactive elements must be keyboard-navigable
 - Use semantic HTML elements (`button`, `nav`, `main`, etc.)
 - ARIA labels for elements without visible text
 - Color contrast: WCAG AA minimum
-- Test with screen reader periodically
+- Verify with E2E accessibility tests (not manual spot-checks)
 
 ## Styling
 

@@ -66,10 +66,11 @@ docs/
 5. Open PR with Claude-powered CI review
 
 ### Fixing a bug
-1. Reproduce the bug with a failing test
+1. Reproduce the bug — preferably with a browser-based E2E test, or an integration test
 2. Implement the fix
-3. Run `/review` to self-review
-4. Open PR
+3. Verify the fix by running the E2E test (use Brave MCP or browser tools)
+4. Run `/review` to self-review
+5. Open PR
 
 ### Cleaning up tech debt
 1. Check `docs/exec-plans/tech-debt-tracker.md` for priorities
@@ -80,8 +81,16 @@ docs/
 
 - `npm run lint` — Code style and formatting
 - `npm run typecheck` — Type safety
-- `npm run test` — Unit and integration tests
+- `npm run test:e2e` — E2E / UI tests (primary — real browser, real flows)
+- `npm run test` — Unit and integration tests (supporting)
 - `scripts/lint-architecture.sh` — Architectural boundary enforcement
+
+## Testing Philosophy
+
+**Test like a human.** See `docs/DESIGN.md` for full details. In short:
+- E2E tests via browser automation (Brave MCP, Claude MCP, Playwright) are the **primary** test layer
+- Unit tests are a **supporting** layer for pure logic only
+- No snapshot tests — ever
 
 ## Key Principles
 

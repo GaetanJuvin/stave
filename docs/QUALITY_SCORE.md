@@ -25,7 +25,8 @@
 
 | Area | Grade | Notes | Last Reviewed |
 |------|-------|-------|--------------|
-| Test coverage | — | | YYYY-MM-DD |
+| E2E test coverage | — | | YYYY-MM-DD |
+| Unit/integration test coverage | — | | YYYY-MM-DD |
 | Documentation | — | | YYYY-MM-DD |
 | Error handling | — | | YYYY-MM-DD |
 | Logging | — | | YYYY-MM-DD |

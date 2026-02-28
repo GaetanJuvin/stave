@@ -41,7 +41,11 @@ When agent throughput is high, it's faster to merge and fix-forward than to bloc
 
 Prefer well-documented, stable, widely-known libraries and patterns. Clever abstractions and bleeding-edge tools are harder for agents to model and harder for new team members to learn.
 
-### 10. Continuous Cleanup
+### 10. Test Like a Human
+
+The best test proves the software works the way a real user experiences it. Invest primarily in **E2E tests** that drive a real browser — click buttons, fill forms, navigate pages, and verify what the user sees. Unit tests are a supporting layer for complex pure logic only. No snapshot tests. No testing implementation details. If a test doesn't correspond to something a user would do or notice, question whether it's worth writing.
+
+### 11. Continuous Cleanup
 
 Entropy is the default. Schedule regular cleanup: scan for deviations from these principles, update quality scores, and open targeted refactoring PRs. Prevention is cheaper than remediation.
 

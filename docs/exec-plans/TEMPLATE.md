@@ -42,7 +42,8 @@ How do we know this is done and correct?
 
 - [ ] Criterion 1
 - [ ] Criterion 2
-- [ ] All tests pass
+- [ ] E2E tests pass (real browser, real user flows)
+- [ ] Unit/integration tests pass
 - [ ] Architecture linting passes
 
 ## Decision Log

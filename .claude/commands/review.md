@@ -24,9 +24,11 @@ Before opening a PR, perform a thorough self-review of all changes.
    - Check for XSS, SQL injection, and other OWASP top 10 risks
 
 5. **Check tests**:
-   - Verify new code has appropriate test coverage
-   - Run the test suite and confirm all tests pass
-   - Check edge cases are covered
+   - Verify new features have E2E tests covering the critical user journey
+   - Run E2E tests via browser automation (Brave MCP or Playwright) and confirm they pass
+   - Run the unit/integration test suite and confirm all tests pass
+   - Check that tests assert on real user-visible behavior, not implementation details
+   - No snapshot tests — if any were added, flag for removal
 
 6. **Check documentation**:
    - Verify any new modules are documented

@@ -71,22 +71,81 @@ Inside boundaries, trust the types.
 
 ## Testing
 
-### Conventions
-- Unit tests live next to the code they test
-- Integration tests in a separate `__tests__/` directory
-- Test names describe behavior: `"should return 404 when user not found"`
-- One assertion per test when possible
+### Philosophy: Test Like a Human
 
-### What to Test
-- Business logic in service layer (high coverage)
-- Schema validation at boundaries
-- Edge cases and error paths
-- Integration points (API, DB)
+The best test is one that proves the software works the way a real user would experience it. Prefer **end-to-end UI tests** that drive a real browser over unit tests that assert implementation details. A passing E2E test means the feature actually works. A passing unit test means one function returns the right value — the user doesn't care.
+
+### Testing Pyramid (Inverted)
+
+```
+┌─────────────────────────────────────────────┐
+│         E2E / UI Tests (PRIMARY)            │  ← Most investment here
+│   Real browser, real clicks, real flows     │
+├─────────────────────────────────────────────┤
+│       Integration Tests (SECONDARY)         │  ← API boundaries, DB queries
+├─────────────────────────────────────────────┤
+│        Unit Tests (SUPPORTING)              │  ← Pure logic, algorithms
+└─────────────────────────────────────────────┘
+```
+
+### E2E / UI Tests — The Primary Layer
+
+Use browser automation via MCP tools (Brave MCP, Claude MCP, Playwright) to test the application the way a human would:
+
+- **Navigate to a page, fill in a form, click submit, verify the result**
+- **Test the full flow** — not isolated components in a fake DOM
+- **Assert what the user sees** — visible text, navigation, error messages
+- **Cover critical user journeys** — signup, login, core actions, error states
+
+```
+tests/
+├── e2e/
+│   ├── auth.test.ts          # Login, signup, logout flows
+│   ├── [feature].test.ts     # Core feature journeys
+│   └── ...
+```
+
+#### Rules
+- Every new feature must have at least one E2E test covering the happy path
+- E2E tests run against a real (or locally running) application — no mocks
+- Test names describe user actions: `"user can create a new project and see it in the dashboard"`
+- Use MCP browser tools (Brave MCP, etc.) so Claude can write and run these tests autonomously
+
+#### What Makes a Good E2E Test
+```
+// Good: tests what the user actually does
+"user fills in signup form, submits, and lands on the dashboard"
+"user clicks delete, confirms the modal, and the item disappears"
+
+// Bad: tests implementation details
+"component renders with correct props"
+"Redux store updates when action is dispatched"
+```
+
+### Integration Tests — The Secondary Layer
+
+Test system boundaries where components talk to each other:
+- API endpoints: real HTTP requests, real responses
+- Database queries: real queries against a test database
+- External service integrations: real calls or contract tests
+
+### Unit Tests — The Supporting Layer
+
+Use unit tests sparingly, only for **pure logic** that is genuinely complex:
+- Algorithms and calculations
+- Data transformations and parsing
+- Business rules with many edge cases
+- Schema validation logic
+
+Unit tests live next to the code they test. Test names describe behavior: `"should return 404 when user not found"`.
 
 ### What NOT to Test
-- Implementation details (private methods, internal state)
-- Framework behavior
-- Simple getters/setters
+
+- **No snapshot tests** — they test nothing meaningful and break on every change
+- **No testing implementation details** — private methods, internal state, component props
+- **No testing framework behavior** — the framework already has tests
+- **No mocking everything** — if you need 10 mocks, you're testing the wrong thing
+- **No testing simple getters/setters** — waste of time
 
 ## Code Organization
 
